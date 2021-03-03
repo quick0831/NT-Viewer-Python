@@ -8,7 +8,7 @@ import com.chaquo.python.android.AndroidPlatform;
 
 public class nt_utils {
     Python py;
-    PyObject module;
+    PyObject module, nt;
 
     nt_utils(Context context){
         if (! Python.isStarted()) {
@@ -16,9 +16,36 @@ public class nt_utils {
         }
         py = Python.getInstance();
         module = py.getModule("nt_utils");
+
+        nt = module.callAttr("getNT");
     }
 
-    String run(){
-        return module.callAttr("run").toString();
+    PyObject getTable(String key){
+        return module.callAttr("getTable", key);
+    }
+
+    String getSubTables(){
+        return module.callAttr("getSubTables", nt).toString();
+    }
+
+    String getKeys(){
+        return module.callAttr("getKeys", nt).toString();
+    }
+
+    Entry getEntry(){
+        return new Entry(module.callAttr("getEntry", nt));
+    }
+
+    class Entry{
+        private final PyObject entry;
+        public String type;
+        public Entry(PyObject e) {
+            entry = e;
+            type = module.callAttr("getType", e).toString();
+        }
+
+        public String getValue(){
+            return module.callAttr("getValueString", entry).toString();
+        }
     }
 }

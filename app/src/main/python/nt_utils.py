@@ -9,17 +9,46 @@ logging.basicConfig(level=logging.DEBUG)
 #https://robotpy.readthedocs.io/projects/pynetworktables/en/stable/examples.html
 #https://chaquo.com/chaquopy/doc/current/android.html
 
+#def valueChanged(key, value, isNew):
+#    print("valueChanged: key: '%s'; value: %s; isNew: %s" % (key, value, isNew))
+#NT.addEntryListener(valueChanged)
+
+# ======================================================================================
+
 ip="10.85.85.2"
 
 NT.initialize(server=ip)
 
-sd = NT.getTable("SmartDashboard")
-nt = NT.getTable("NT Viewer")
+types = {
+    NT.EntryTypes.BOOLEAN       : "Boolean",
+    NT.EntryTypes.BOOLEAN_ARRAY : "Boolean Array",
+    NT.EntryTypes.DOUBLE        : "Number",
+    NT.EntryTypes.DOUBLE_ARRAY  : "Number Array",
+    NT.EntryTypes.RAW           : "Raw",
+    NT.EntryTypes.STRING        : "String",
+    NT.EntryTypes.STRING_ARRAY  : "String Array"
+}
 
-def valueChanged(key, value, isNew):
-    print("valueChanged: key: '%s'; value: %s; isNew: %s" % (key, value, isNew))
+def getNT(): # Big Table including all the tables
+    return NT.getGlobalTable()
 
-NT.addEntryListener(valueChanged)
+def getTable(key):
+    return NT.getTable(key)
 
-def run():
-    return "123IDK"
+def getSubTables(table):
+    return table.getSubTables()
+
+def getKeys(table, types=0):
+    return table.getKeys(types)
+
+def getEntry(table, key):
+    return table.getEntry(key)
+
+def getValue(entry):
+    return entry.value
+
+def getValueString(entry):
+    return repr(entry.value)
+
+def getType(entry):
+    return types[entry.getType()]

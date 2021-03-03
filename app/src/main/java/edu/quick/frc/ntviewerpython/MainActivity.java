@@ -15,6 +15,6 @@ public class MainActivity extends AppCompatActivity {
         nt = new nt_utils(this);
 
         TextView t = findViewById(R.id.Text);
-        t.setText(nt.run());
+        t.setText(nt.getSubTables());
     }
 }
