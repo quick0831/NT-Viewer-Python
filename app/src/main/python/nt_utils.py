@@ -13,10 +13,13 @@ ip="10.85.85.2"
 
 NT.initialize(server=ip)
 
-sd = NetworkTables.getTable("SmartDashboard")
-nt = NetworkTables.getTable("NT Viewer")
+sd = NT.getTable("SmartDashboard")
+nt = NT.getTable("NT Viewer")
 
 def valueChanged(key, value, isNew):
     print("valueChanged: key: '%s'; value: %s; isNew: %s" % (key, value, isNew))
 
-NetworkTables.addEntryListener(valueChanged)
+NT.addEntryListener(valueChanged)
+
+def run():
+    return "123IDK"
