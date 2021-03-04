@@ -24,8 +24,8 @@ public class nt_utils {
         return module.callAttr("getTable", key);
     }
 
-    String getSubTables(){
-        return module.callAttr("getSubTables", nt).toString();
+    String getTables(){
+        return module.callAttr("getTables").toString();
     }
 
     String getKeys(){

@@ -3,6 +3,8 @@ package edu.quick.frc.ntviewerpython;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
         nt = new nt_utils(this);
 
         TextView t = findViewById(R.id.Text);
-        t.setText(nt.getSubTables());
+        Button b = findViewById(R.id.button);
+        b.setOnClickListener(v -> {
+            t.setText(nt.getTables());
+        });
     }
 }

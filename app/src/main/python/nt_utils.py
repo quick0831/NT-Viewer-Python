@@ -1,4 +1,5 @@
 from networktables import NetworkTables as NT
+import settings
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -15,7 +16,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # ======================================================================================
 
-ip="10.85.85.2"
+ip = settings.ip
 
 NT.initialize(server=ip)
 
@@ -37,6 +38,9 @@ def getTable(key):
 
 def getSubTables(table):
     return table.getSubTables()
+
+def getTables():
+    return NT.getGlobalTable().getSubTables()
 
 def getKeys(table, types=0):
     return table.getKeys(types)
