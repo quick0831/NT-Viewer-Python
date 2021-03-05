@@ -31,18 +31,22 @@ public class MainActivity extends AppCompatActivity {
         });*/
 
         RecyclerView rv = findViewById(R.id.RecyclerView);
-
         ArrayList<Item> data = new ArrayList<>();
-        data.add(new Item("Marshmallow", "http://i.imgur.com/mVpDmzc.jpg", "Android 66666666666666"));
-
         MyAdapter adapter = new MyAdapter(this, data);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
-        data.add(new Item("Lollipop", "http://i.imgur.com/kyVfpYh.png", "Android 55555555555555"));
+        data.add(new Item("<= Return", "", "/NT Viewer"));
+
+        data.add(new Item("SmartDashboard", "", "SubTable"));
+
+        data.add(new Item("Entry 1", "123.45", "Number"));
+        data.add(new Item("Entry 2", "Hello There!", "String"));
         adapter.notifyDataSetChanged();
     }
+
+// ==== Adapter for RecyclerView ===================================================================
 
     public static class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private final Context mContext;
@@ -82,11 +86,14 @@ public class MainActivity extends AppCompatActivity {
 
             public ViewHolder(View itemView) {
                 super(itemView);
+                itemView.setOnClickListener(v -> {
+                    Log.i("OnClick", (String) keyText.getText());
+                });
             }
         }
     }
 
-    public class Item {
+    public static class Item {
         String key, value, type;
 
         public Item(String key, String value, String type) {
