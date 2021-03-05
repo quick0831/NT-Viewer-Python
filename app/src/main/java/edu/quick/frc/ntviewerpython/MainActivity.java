@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     nt_utils nt;
@@ -29,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         nt = new nt_utils(this);
-        pwd = new nt_utils.Pwd(nt);
+        pwd = new nt_utils.Pwd(this, nt);
 /*
         TextView t = findViewById(R.id.Text);
         Button b = findViewById(R.id.button);
@@ -51,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         //data.add(new Item("SmartDashboard", "", "SubTable"));
         //data.add(new Item("Entry 1", "123.45", "Number"));
         //data.add(new Item("Entry 2", "Hello There!", "String"));
+        data.clear();
 
         if(!pwd.isRoot())
             data.add(new Item("<= Return", "", pwd.getFullPath()));
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
 // ==== Adapter for RecyclerView ===================================================================
 
-    public static class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+    public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private final Context mContext;
         private final ArrayList<Item> mData;
 
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             return mData.size();
         }
 
-        static class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
             public TextView keyText, valueText, typeText;
 
             public ViewHolder(View itemView) {
@@ -111,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     String type = (String) typeText.getText();
                     if(type.equals("SubTable") || type.equals("Table")) {
                         Log.i("OnClickSubTable", (String) keyText.getText());
+                        pwd.cd((String) keyText.getText());
                         return;
                     }
                     if(type.matches("Boolean|Boolean Array|Number|Number Array|Raw|String|String Array")) {
@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
                     Log.i("OnClickElse", type); // Pressed the "Return" button
+                    pwd.cdBack();
                 });
             }
         }

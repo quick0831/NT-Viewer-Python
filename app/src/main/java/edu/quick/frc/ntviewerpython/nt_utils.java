@@ -1,5 +1,6 @@
 package edu.quick.frc.ntviewerpython;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.chaquo.python.PyObject;
@@ -69,9 +70,11 @@ public class nt_utils {
     static class Pwd{
         List<String> dir = new ArrayList<>();
         nt_utils nt;
+        MainActivity activity;
 
-        public Pwd(nt_utils nt) {
+        public Pwd(MainActivity activity, nt_utils nt) {
             this.nt = nt;
+            this.activity = activity;
         }
 
         boolean isRoot(){
@@ -87,10 +90,12 @@ public class nt_utils {
 
         void cdBack(){
             dir.remove(dir.size()-1);
+            activity.updateData();
         }
 
         void cd(String subTable){
             dir.add(subTable);
+            activity.updateData();
         }
 
         PyObject getTable(){
