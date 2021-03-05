@@ -6,6 +6,12 @@ import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class nt_utils {
     Python py;
     PyObject module, nt;
@@ -24,28 +30,84 @@ public class nt_utils {
         return module.callAttr("getTable", key);
     }
 
-    String getTables(){
-        return module.callAttr("getTables").toString();
+    List<String> getTables() {
+        String str = module.callAttr("getTables").toString();
+        return stringToList(str);
     }
 
-    String getKeys(){
-        return module.callAttr("getKeys", nt).toString();
+    List<String> getSubTables(PyObject table) {
+        String str = module.callAttr("getSubTables", table).toString();
+        return stringToList(str);
     }
 
-    Entry getEntry(){
-        return new Entry(module.callAttr("getEntry", nt));
+    List<String> getKeys(PyObject table){
+        String str = module.callAttr("getKeys", table).toString();
+        return stringToList(str);
+    }
+
+    Entry getEntry(PyObject table, String key){
+        return new Entry(module.callAttr("getEntry", table, key), key);
     }
 
     class Entry{
         private final PyObject entry;
-        public String type;
-        public Entry(PyObject e) {
+        public final String key;
+        public Entry(PyObject e, String k) {
             entry = e;
-            type = module.callAttr("getType", e).toString();
+            key = k;
+        }
+
+        public String getType(){
+            return module.callAttr("getType", entry).toString();
         }
 
         public String getValue(){
             return module.callAttr("getValueString", entry).toString();
+        }
+    }
+
+    static class Pwd{
+        List<String> dir = new ArrayList<>();
+        nt_utils nt;
+
+        public Pwd(nt_utils nt) {
+            this.nt = nt;
+        }
+
+        boolean isRoot(){
+            return dir.size() == 0;
+        }
+
+        String getFullPath(){
+            StringBuilder path = new StringBuilder();
+            for(String s: dir)
+                path.append("/").append(s);
+            return path.toString();
+        }
+
+        void cdBack(){
+            dir.remove(dir.size()-1);
+        }
+
+        void cd(String subTable){
+            dir.add(subTable);
+        }
+
+        PyObject getTable(){
+            return nt.getTable(getFullPath());
+        }
+    }
+
+    //String[] list = t.replace("[", "").replace("]", "").split(",");
+    private List<String> stringToList(String str) {
+        try {
+            JSONArray jsonArray = new JSONArray(str);
+            List<String> list = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++)
+                list.add(jsonArray.getString(i));
+            return list;
+        } catch (JSONException e) {
+            return null;
         }
     }
 }

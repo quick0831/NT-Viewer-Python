@@ -14,15 +14,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     nt_utils nt;
+    ArrayList<Item> data;
+    MyAdapter adapter;
+    RecyclerView rv;
+    nt_utils.Pwd pwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         nt = new nt_utils(this);
+        pwd = new nt_utils.Pwd(nt);
 /*
         TextView t = findViewById(R.id.Text);
         Button b = findViewById(R.id.button);
@@ -30,19 +37,33 @@ public class MainActivity extends AppCompatActivity {
             t.setText(nt.getTables());
         });*/
 
-        RecyclerView rv = findViewById(R.id.RecyclerView);
-        ArrayList<Item> data = new ArrayList<>();
-        MyAdapter adapter = new MyAdapter(this, data);
+        rv = findViewById(R.id.RecyclerView);
+        data = new ArrayList<>();
+        adapter = new MyAdapter(this, data);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
-        data.add(new Item("<= Return", "", "/NT Viewer"));
+        updateData();
+    }
 
-        data.add(new Item("SmartDashboard", "", "SubTable"));
+    void updateData(){
+        //data.add(new Item("SmartDashboard", "", "SubTable"));
+        //data.add(new Item("Entry 1", "123.45", "Number"));
+        //data.add(new Item("Entry 2", "Hello There!", "String"));
 
-        data.add(new Item("Entry 1", "123.45", "Number"));
-        data.add(new Item("Entry 2", "Hello There!", "String"));
+        if(!pwd.isRoot())
+            data.add(new Item("<= Return", "", pwd.getFullPath()));
+
+        // SubTables
+        for(String s:nt.getSubTables(pwd.getTable()))
+            data.add(new Item(s, "", pwd.isRoot() ? "Table" : "SubTable"));
+
+        // Entries
+        for(String s:nt.getKeys(pwd.getTable())){
+            nt_utils.Entry e = nt.getEntry(pwd.getTable(), s);
+            data.add(new Item(s, e.getValue(), e.getType()));
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -87,7 +108,16 @@ public class MainActivity extends AppCompatActivity {
             public ViewHolder(View itemView) {
                 super(itemView);
                 itemView.setOnClickListener(v -> {
-                    Log.i("OnClick", (String) keyText.getText());
+                    String type = (String) typeText.getText();
+                    if(type.equals("SubTable") || type.equals("Table")) {
+                        Log.i("OnClickSubTable", (String) keyText.getText());
+                        return;
+                    }
+                    if(type.matches("Boolean|Boolean Array|Number|Number Array|Raw|String|String Array")) {
+                        Log.i("OnClickEntry", (String) keyText.getText());
+                        return;
+                    }
+                    Log.i("OnClickElse", type); // Pressed the "Return" button
                 });
             }
         }

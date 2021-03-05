@@ -30,6 +30,11 @@ types = {
     NT.EntryTypes.STRING_ARRAY  : "String Array"
 }
 
+# For Test Only
+s=NT.getTable("/SmartDashboard")
+s.putNumber("a", 1)
+s.putString("b", "OAO")
+
 def getNT(): # Big Table including all the tables
     return NT.getGlobalTable()
 
