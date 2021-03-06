@@ -1,6 +1,12 @@
 package edu.quick.frc.ntviewerpython;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -24,6 +30,13 @@ public class nt_utils {
         module = py.getModule("nt_utils");
 
         nt = module.callAttr("getNT");
+
+        module.put("handler", new Handler(Looper.myLooper()){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                ((MainActivity) context).updateData();
+            }
+        });
     }
 
     PyObject getTable(String key){

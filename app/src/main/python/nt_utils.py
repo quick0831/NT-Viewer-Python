@@ -30,11 +30,6 @@ types = {
     NT.EntryTypes.STRING_ARRAY  : "String Array"
 }
 
-# For Test Only
-#s=NT.getTable("/SmartDashboard")
-#s.putNumber("a", 1)
-#s.putString("b", "OAO")
-
 def getNT(): # Big Table including all the tables
     return NT.getGlobalTable()
 
@@ -58,3 +53,11 @@ def getValueString(entry):
 
 def getType(entry):
     return types[entry.getType()]
+
+handler = None
+
+# Note: key is full path
+def callback(key, value, isNew): # (str, Any, bool)
+    return handler.sendEmptyMessage(0)
+
+NT.addEntryListener(callback)
