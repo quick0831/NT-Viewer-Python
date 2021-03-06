@@ -1,6 +1,5 @@
 package edu.quick.frc.ntviewerpython;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.chaquo.python.PyObject;
