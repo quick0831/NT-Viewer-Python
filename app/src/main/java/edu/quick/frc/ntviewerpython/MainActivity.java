@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -20,6 +23,23 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Item> data;
     MyAdapter adapter;
     RecyclerView rv;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.menu_setting){
+            // Open Setting Page
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     nt_utils.Pwd pwd;
 
     @Override
