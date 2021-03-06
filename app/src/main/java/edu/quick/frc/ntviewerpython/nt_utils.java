@@ -30,11 +30,6 @@ public class nt_utils {
         return module.callAttr("getTable", key);
     }
 
-    List<String> getTables() {
-        String str = module.callAttr("getTables").toString();
-        return stringToList(str);
-    }
-
     List<String> getSubTables(PyObject table) {
         String str = module.callAttr("getSubTables", table).toString();
         return stringToList(str);
@@ -81,6 +76,7 @@ public class nt_utils {
         }
 
         String getFullPath(){
+            if(dir.size() == 0) return "/";
             StringBuilder path = new StringBuilder();
             for(String s: dir)
                 path.append("/").append(s);

@@ -44,9 +44,6 @@ def getTable(key):
 def getSubTables(table):
     return table.getSubTables()
 
-def getTables():
-    return NT.getGlobalTable().getSubTables()
-
 def getKeys(table, types=0):
     return table.getKeys(types)
 
